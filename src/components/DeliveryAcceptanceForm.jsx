@@ -85,6 +85,9 @@ const DeliveryAcceptanceForm = () => {
         </div>
       </div>
 
+      {/* PAGE BREAK: Payment and Signature onto Page 2 */}
+      <div className="html2pdf__page-break"></div>
+
       {/* 4. Final Payment Details */}
       <h3 className="section-title"><DollarSign size={20} /> Final Payment Details</h3>
       <div className="form-grid">

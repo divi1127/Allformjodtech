@@ -93,14 +93,16 @@ if (el.tagName === 'H3' || className.includes('section-title')) {
         div.style.fontFamily = computed.fontFamily;
         div.style.lineHeight = computed.lineHeight;
         div.style.minHeight = computed.height;
+        div.style.width = computed.width; // Fix horizontal alignment overflow
+        div.style.boxSizing = 'border-box';
         
         // Apply pure black text overrides
-       div.style.color = '#000000ff';
-div.style.webkitTextFillColor = '#000000';
+        div.style.color = '#000000ff';
+        div.style.webkitTextFillColor = '#000000';
 div.style.opacity = '1';
 div.style.fontWeight = '700';
-div.style.fontFamily = computed.fontFamily;
-div.style.fontSize = computed.fontSize;
+div.style.fontFamily = "'Inter', system-ui, sans-serif";
+div.style.fontSize = "0.95rem";
 div.style.letterSpacing = computed.letterSpacing;
 div.style.textTransform = computed.textTransform;
 div.style.border = 'none';
@@ -117,13 +119,35 @@ div.style.wordBreak = 'break-word';
         replacements.push({ parent, div, input });
       });
 
+      // Flawless checkbox rendering workaround to fix Delivery Form alignment
+      const checkboxes = Array.from(element.querySelectorAll('input[type="checkbox"]'));
+      checkboxes.forEach(chk => {
+        const parent = chk.parentNode;
+        const box = document.createElement('span');
+        box.style.display = 'inline-flex';
+        box.style.alignItems = 'center';
+        box.style.justifyContent = 'center';
+        box.style.minWidth = '14px';
+        box.style.height = '14px';
+        box.style.border = '1.5px solid #000000';
+        box.style.borderRadius = '2px';
+        box.style.marginRight = '4px';
+        box.style.fontSize = '12px';
+        box.style.fontWeight = '900';
+        box.style.color = '#000000';
+        box.innerHTML = chk.checked ? '✓' : '&nbsp;';
+        
+        parent.replaceChild(box, chk);
+        replacements.push({ parent, div: box, input: chk });
+      });
+
       const opt = {
         margin: [10, 10],
         filename: `JOD_TECH_Form_${activeTab.toUpperCase()}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'] }
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
       html2pdf().set(opt).from(element).save().then(() => {
