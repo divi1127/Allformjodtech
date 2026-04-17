@@ -40,6 +40,8 @@ function App() {
     
     // Use a timeout to ensure state update (isPreview) is rendered before capturing
     setTimeout(() => {
+      // Force Desktop simulation for mobile devices
+      element.classList.add('pdf-capture-mode');
       
       // FOOLPROOF HTML2CANVAS WORKAROUND
       // html2canvas struggles to consistently render <input> colors, placeholders, and CSS variables.
