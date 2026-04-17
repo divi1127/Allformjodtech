@@ -1,11 +1,10 @@
 import React from 'react';
-import { CheckCircle, Truck, Package, ShieldCheck, DollarSign } from 'lucide-react';
 
 const DeliveryAcceptanceForm = () => {
   return (
     <div className="animate-fade">
       {/* 1. Project Delivery Information */}
-      <h3 className="section-title"><Truck size={20} /> Delivery Information</h3>
+      <h3 className="section-title">Delivery Information</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>Delivery Date</label>
@@ -32,7 +31,7 @@ const DeliveryAcceptanceForm = () => {
       </div>
 
       {/* 2. Delivered Items Checklist */}
-      <h3 className="section-title"><Package size={20} /> Delivered Items Checklist</h3>
+      <h3 className="section-title">Delivered Items Checklist</h3>
       <div className="form-grid">
         <div className="input-group">
           <label style={{ display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'none' }}>
@@ -65,7 +64,7 @@ const DeliveryAcceptanceForm = () => {
       </div>
 
       {/* 3. Client Acceptance Details */}
-      <h3 className="section-title"><ShieldCheck size={20} /> Acceptance & Warranty</h3>
+      <h3 className="section-title">Acceptance & Warranty</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>Warranty / Support Period</label>
@@ -89,7 +88,7 @@ const DeliveryAcceptanceForm = () => {
       <div className="html2pdf__page-break"></div>
 
       {/* 4. Final Payment Details */}
-      <h3 className="section-title"><DollarSign size={20} /> Final Payment Details</h3>
+      <h3 className="section-title">Final Payment Details</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>Final Invoice Amount ($)</label>

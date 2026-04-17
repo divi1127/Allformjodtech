@@ -1,11 +1,10 @@
 import React from 'react';
-import { RefreshCcw, Info, List, TrendingUp, DollarSign, Calendar } from 'lucide-react';
 
 const ChangeOrderForm = () => {
   return (
     <div className="animate-fade">
       {/* 1. Basic Details */}
-      <h3 className="section-title"><Info size={20} /> Request Details</h3>
+      <h3 className="section-title">Request Details</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>Change Request ID</label>
@@ -31,7 +30,7 @@ const ChangeOrderForm = () => {
       </div>
 
       {/* 2. Change Details */}
-      <h3 className="section-title"><List size={20} /> Change & Reason</h3>
+      <h3 className="section-title">Change & Reason</h3>
       <div className="form-grid">
         <div className="input-group full-width">
           <label>Requested Change Description</label>
@@ -49,14 +48,14 @@ const ChangeOrderForm = () => {
 
       {/* 3. Impact Analysis */}
 
-      <h3 className="section-title"><TrendingUp size={20} /> Impact Analysis</h3>
+      <h3 className="section-title">Impact Analysis</h3>
       <div className="form-grid">
         <div className="input-group">
-          <label><DollarSign size={14} /> Additional Cost ($)</label>
+          <label>Additional Cost ($)</label>
           <input type="number" placeholder="0.00" />
         </div>
         <div className="input-group">
-          <label><Calendar size={14} /> Additional Time (Days)</label>
+          <label>Additional Time (Days)</label>
           <input type="number" placeholder="e.g. 5" />
         </div>
         <div className="input-group">

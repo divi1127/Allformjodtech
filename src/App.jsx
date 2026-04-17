@@ -48,33 +48,33 @@ function App() {
       const textElements = element.querySelectorAll('*');
       const originalStyles = new Map();
 
-      // Force pure black on all elements and borders inline
+      // Force pure black on all elements and borders inline EXCEPT the branding header/footer
       textElements.forEach(el => {
         if (!el.style || !el.style.setProperty) return;
         
         const className = typeof el.className === 'string' ? el.className : '';
         
-        // Let the form badge keep its white text
-        if (className.includes('form-badge')) return;
+        // Skip header/footer and branding elements to PRESERVE TEAL COLORS in PDF
+        if (el.closest('.paper-header') || el.closest('.paper-footer') || className.includes('form-badge')) return;
         
-       originalStyles.set(el, {
-  color: el.style.color,
-  webkitTextFillColor: el.style.webkitTextFillColor,
-  opacity: el.style.opacity,
-  borderLeftColor: el.style.borderLeftColor
-});
+        originalStyles.set(el, {
+          color: el.style.color,
+          webkitTextFillColor: el.style.webkitTextFillColor,
+          opacity: el.style.opacity,
+          borderLeftColor: el.style.borderLeftColor
+        });
 
-if (el.tagName === 'LABEL') {
-  el.style.setProperty('color', '#0f4d3f', 'important');
-  el.style.setProperty('-webkit-text-fill-color', '#0f4d3f', 'important');
-} else {
-  el.style.setProperty('color', '#000000', 'important');
-  el.style.setProperty('-webkit-text-fill-color', '#000000', 'important');
-}
-el.style.setProperty('opacity', '1', 'important');
-if (el.tagName === 'H3' || className.includes('section-title')) {
-  el.style.setProperty('border-left-color', '#000000', 'important');
-}
+        if (el.tagName === 'LABEL') {
+          el.style.setProperty('color', '#0f4d3f', 'important');
+          el.style.setProperty('-webkit-text-fill-color', '#0f4d3f', 'important');
+        } else {
+          el.style.setProperty('color', '#000000', 'important');
+          el.style.setProperty('-webkit-text-fill-color', '#000000', 'important');
+        }
+        el.style.setProperty('opacity', '1', 'important');
+        if (el.tagName === 'H3' || className.includes('section-title')) {
+          el.style.setProperty('border-left-color', '#000000', 'important');
+        }
       });
 
       // Swap inputs to divs for flawless text rendering and HIDE EMPTY FIELDS
@@ -109,7 +109,7 @@ if (el.tagName === 'H3' || className.includes('section-title')) {
         div.style.boxSizing = 'border-box';
         
         // Apply pure black text overrides
-        div.style.color = '#000000ff';
+        div.style.color = '#000000';
         div.style.webkitTextFillColor = '#000000';
         div.style.opacity = '1';
         div.style.fontWeight = '700';
@@ -341,8 +341,14 @@ el.style.borderLeftColor = old.borderLeftColor;
               <div className="doc-meta-field">
                 <span className="doc-meta-label">DOC NO:</span>
                 <input 
+                  key={activeTab}
                   type="text" 
-                  defaultValue={`${activeTab.slice(0, 3).toUpperCase()}-${new Date().getFullYear()}-0416`} 
+                  defaultValue={`${
+                    activeTab === 'order' ? 'ORD' : 
+                    activeTab === 'implementation' ? 'IMN' : 
+                    activeTab === 'delivery' ? 'DA' : 
+                    'CR'
+                  }-${new Date().getFullYear()}-0417`} 
                   className="meta-input"
                 />
               </div>
@@ -362,7 +368,7 @@ el.style.borderLeftColor = old.borderLeftColor;
             
             {/* Common Signature Section */}
             <div className="signature-section">
-              <h3 className="section-title"><Printer size={20} /> FINAL APPROVAL & SIGNATURES</h3>
+              <h3 className="section-title">FINAL APPROVAL & SIGNATURES</h3>
               <div className="signature-grid">
                 <div className="sig-box">
                   <div className="sig-line" />
@@ -379,11 +385,6 @@ el.style.borderLeftColor = old.borderLeftColor;
               </div>
             </div>
 
-            {/* Paper Footer */}
-            <div className="paper-footer">
-              <div className="confidential-stamp">CONFIDENTIAL DOCUMENT</div>
-              <div className="footer-links">This document is a formal agreement between JOD TECH and the Client.</div>
-            </div>
           </div>
         </div>
       </main>

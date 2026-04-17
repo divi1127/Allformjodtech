@@ -1,11 +1,10 @@
 import React from 'react';
-import { Settings, Info, Layers, Cpu, AlertTriangle, CheckSquare } from 'lucide-react';
 
 const ImplementationForm = () => {
   return (
     <div className="animate-fade">
       {/* 1. Basic Project Details */}
-      <h3 className="section-title"><Info size={20} /> Basic Project Details</h3>
+      <h3 className="section-title">Basic Project Details</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>Project ID</label>
@@ -22,7 +21,7 @@ const ImplementationForm = () => {
       </div>
 
       {/* 2. Requirement Confirmation */}
-      <h3 className="section-title"><CheckSquare size={20} /> Requirement Confirmation</h3>
+      <h3 className="section-title">Requirement Confirmation</h3>
       <div className="form-grid">
         <div className="input-group full-width">
           <label>Approved Scope & Features</label>
@@ -48,7 +47,7 @@ const ImplementationForm = () => {
 
       {/* 3. Technical Implementation Details */}
 
-      <h3 className="section-title"><Cpu size={20} /> Technical Implementation</h3>
+      <h3 className="section-title">Technical Implementation</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>Frontend Technology</label>
@@ -73,7 +72,7 @@ const ImplementationForm = () => {
 
       {/* 4. Timeline and Milestones */}
 
-      <h3 className="section-title"><Layers size={20} /> Timeline & Milestones</h3>
+      <h3 className="section-title">Timeline & Milestones</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>UI Design Completion</label>
@@ -94,7 +93,7 @@ const ImplementationForm = () => {
       </div>
 
       {/* 5. Risks and Dependencies */}
-      <h3 className="section-title"><AlertTriangle size={20} /> Risks & Dependencies</h3>
+      <h3 className="section-title">Risks & Dependencies</h3>
       <div className="form-grid">
         <div className="input-group full-width">
           <label>Client Dependencies</label>

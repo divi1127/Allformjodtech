@@ -1,11 +1,10 @@
 import React from 'react';
-import { User, Briefcase, Calendar, DollarSign, PenTool } from 'lucide-react';
 
 const ProjectOrderForm = () => {
   return (
     <div className="animate-fade">
       {/* 1. Client Information */}
-      <h3 className="section-title"><User size={20} /> Client Information</h3>
+      <h3 className="section-title">Client Information</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>Client Company Name</label>
@@ -43,7 +42,7 @@ const ProjectOrderForm = () => {
 
       {/* 2. Project Information */}
 
-      <h3 className="section-title"><Briefcase size={20} /> Project Information</h3>
+      <h3 className="section-title">Project Information</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>Project Name</label>
@@ -63,10 +62,6 @@ const ProjectOrderForm = () => {
         <div className="input-group full-width">
           <label>Project Description</label>
           <textarea placeholder="Briefly describe the project goals..."></textarea>
-        </div>
-        <div className="input-group full-width">
-          <label>Scope of Work</label>
-          <textarea placeholder="Detail the key deliverables..."></textarea>
         </div>
         <div className="input-group">
           <label>Modules Required</label>
@@ -101,7 +96,7 @@ const ProjectOrderForm = () => {
 
       {/* 3. Timeline Details */}
 
-      <h3 className="section-title"><Calendar size={20} /> Timeline Details</h3>
+      <h3 className="section-title">Timeline Details</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>Project Start Date</label>
@@ -119,7 +114,7 @@ const ProjectOrderForm = () => {
 
       {/* 4. Commercial Details */}
 
-      <h3 className="section-title"><DollarSign size={20} /> Commercial Details</h3>
+      <h3 className="section-title">Commercial Details</h3>
       <div className="form-grid">
         <div className="input-group">
           <label>Total Project Cost ($)</label>

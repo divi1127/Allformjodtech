@@ -170,6 +170,8 @@ body {
   min-height: 1200px;
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Remove fixed min-height in preview/PDF to prevent empty space and forced breaks */
@@ -186,7 +188,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  border-bottom: 3px solid var(--primary);
+  border-bottom: 3px solid #006d5b; /* Match teal color from image */
   padding-bottom: 1.5rem;
   margin-bottom: 2.5rem;
 }
@@ -205,19 +207,20 @@ body {
 
 .corp-logo {
   font-family: 'Outfit', sans-serif;
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
-  color: var(--primary);
+  color: #006d5b; /* Teal color */
   line-height: 1;
   letter-spacing: -1px;
 }
 
 .corp-tagline {
   font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 0.15em;
-  color: #1e293b;
-  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  color: #1a202c;
+  margin-top: 0.4rem;
+  text-transform: uppercase;
 }
 
 .corp-meta {
@@ -239,10 +242,10 @@ body {
 
 
 .form-badge {
-  background: var(--primary);
+  background: #006d5b;
   color: white;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px; /* Pill shape as requested */
   font-weight: 800;
   font-size: 0.85rem;
   display: inline-block;
@@ -318,13 +321,13 @@ body {
   font-family: 'Outfit', sans-serif;
   font-size: 1rem;
   background: #f8fafc;
-  padding: 0.75rem 1.25rem;
-  border-left: 4px solid var(--primary);
+  padding: 0.75rem 1rem;
+  border: none; /* Removed the line completely as requested */
   margin: 2.5rem 0 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: var(--primary-dark);
+  color: #000;
   break-inside: avoid;
   page-break-inside: avoid;
   break-after: avoid;
@@ -390,7 +393,8 @@ input::placeholder, textarea::placeholder {
   -webkit-text-fill-color: #000 !important;
 }
 
-.is-preview * {
+/* Allow branding colors in preview */
+.is-preview .form-body * {
   color: #000 !important;
 }
 
@@ -411,17 +415,8 @@ input::placeholder, textarea::placeholder {
 }
 
 /* Deep Black Overrides for PDF Elements */
-.is-preview .paper-header {
-  border-color: #000 !important;
-}
-
 .is-preview .section-title {
   border-color: #000 !important;
-}
-
-.is-preview .form-badge {
-  background: #000 !important;
-  color: #fff !important;
 }
 
 .is-preview .confidential-stamp {
@@ -481,25 +476,6 @@ input:focus, textarea:focus {
   color: var(--text-muted);
 }
 
-.paper-footer {
-  margin-top: 5rem;
-  border-top: 1px solid var(--border);
-  padding-top: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.65rem;
-  color: var(--text-muted);
-}
-
-.confidential-stamp {
-  font-weight: 800;
-  border: 1.5px solid #ef4444;
-  color: #ef4444;
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  opacity: 0.6;
-}
 
 /* Buttons */
 .btn {
@@ -537,6 +513,22 @@ input:focus, textarea:focus {
 
 /* Mobile Adjustments */
 @media (max-width: 768px) {
+  .app-wrapper {
+    background-color: #cbd5e1; /* Slightly darker background to make the white "paper" pop */
+  }
+
+  .form-card-container {
+    margin: 1rem auto;
+    width: 98%; /* Keep it almost full but with a tiny edge for document feel */
+    padding: 0 0.5rem;
+  }
+
+  .paper-form {
+    padding: 2rem 1.5rem !important; /* Professional margins even on mobile */
+    border-radius: 4px; /* Sharper corners for document look */
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+
   .header-content {
     flex-direction: column;
     align-items: flex-start;
@@ -760,7 +752,7 @@ label,
   opacity: 1 !important;
 }
 
-.is-preview * {
+.is-preview .form-body * {
   color: #000 !important;
   -webkit-text-fill-color: #000 !important;
   opacity: 1 !important;
