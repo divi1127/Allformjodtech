@@ -836,9 +836,9 @@ label,
   max-width: none !important;
   padding: 3rem !important;
   background: white !important;
-  position: absolute !important;
-  left: -9999px !important;
-  top: 0 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  /* Remove absolute positioning that caused empty capture */
 }
 
 .pdf-capture-mode .form-grid {
@@ -874,4 +874,11 @@ label,
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 3rem !important;
+}
+
+/* Global blocker during capture */
+.capturing-pdf {
+  pointer-events: none !important;
+  user-select: none !important;
+  overflow: hidden !important;
 }

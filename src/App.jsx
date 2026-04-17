@@ -33,12 +33,20 @@ function App() {
 
   const handleDownloadPDF = () => {
     const element = formRef.current;
-    
+    if (!element) return;
+
     // Switch to preview mode temporarily for better PDF look
     const wasPreview = isPreview;
     setIsPreview(true);
     
-    // Use a timeout to ensure state update (isPreview) is rendered before capturing
+    // Block interaction during capture
+    const wrapper = document.querySelector('.app-wrapper');
+    if (wrapper) wrapper.classList.add('capturing-pdf');
+    
+    // Explicitly scroll to top to ensure capture starts from origin
+    window.scrollTo(0, 0);
+
+    // Use a longer timeout to ensure state update (isPreview) and Desktop simulated layout are rendered
     setTimeout(() => {
       // Force Desktop simulation for mobile devices
       element.classList.add('pdf-capture-mode');
@@ -248,6 +256,7 @@ el.style.borderLeftColor = old.borderLeftColor;
         setIsPreview(wasPreview);
         element.classList.remove('is-preview');
         element.classList.remove('pdf-capture-mode');
+        if (wrapper) wrapper.classList.remove('capturing-pdf');
       });
 
     }, 200);
