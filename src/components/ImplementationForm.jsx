@@ -46,10 +46,8 @@ const ImplementationForm = () => {
         </div>
       </div>
 
-      {/* PAGE BREAK: Technical Info onto Page 2 */}
-      <div className="html2pdf__page-break"></div>
-
       {/* 3. Technical Implementation Details */}
+
       <h3 className="section-title"><Cpu size={20} /> Technical Implementation</h3>
       <div className="form-grid">
         <div className="input-group">
@@ -70,7 +68,11 @@ const ImplementationForm = () => {
         </div>
       </div>
 
+      {/* PAGE BREAK: Timeline, Risks, and Signatures onto Page 2 */}
+      <div className="html2pdf__page-break"></div>
+
       {/* 4. Timeline and Milestones */}
+
       <h3 className="section-title"><Layers size={20} /> Timeline & Milestones</h3>
       <div className="form-grid">
         <div className="input-group">
@@ -103,9 +105,6 @@ const ImplementationForm = () => {
           <textarea placeholder="Potential bottlenecks or risks..."></textarea>
         </div>
       </div>
-
-      {/* PAGE BREAK: Signatures onto Page 3 */}
-      <div className="html2pdf__page-break"></div>
     </div>
   );
 };

@@ -41,10 +41,8 @@ const ProjectOrderForm = () => {
         </div>
       </div>
 
-      {/* PAGE BREAK: Project Info onto Page 2 */}
-      <div className="html2pdf__page-break"></div>
-
       {/* 2. Project Information */}
+
       <h3 className="section-title"><Briefcase size={20} /> Project Information</h3>
       <div className="form-grid">
         <div className="input-group">
@@ -98,7 +96,11 @@ const ProjectOrderForm = () => {
         </div>
       </div>
 
+      {/* PAGE BREAK: Timeline, Commercial, and Signatures onto Page 2 */}
+      <div className="html2pdf__page-break"></div>
+
       {/* 3. Timeline Details */}
+
       <h3 className="section-title"><Calendar size={20} /> Timeline Details</h3>
       <div className="form-grid">
         <div className="input-group">
@@ -115,10 +117,8 @@ const ProjectOrderForm = () => {
         </div>
       </div>
 
-      {/* PAGE BREAK: Commercial onto Page 3 */}
-      <div className="html2pdf__page-break"></div>
-
       {/* 4. Commercial Details */}
+
       <h3 className="section-title"><DollarSign size={20} /> Commercial Details</h3>
       <div className="form-grid">
         <div className="input-group">

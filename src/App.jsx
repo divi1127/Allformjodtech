@@ -77,11 +77,23 @@ if (el.tagName === 'H3' || className.includes('section-title')) {
 }
       });
 
-      // Swap inputs to divs for flawless text rendering
+      // Swap inputs to divs for flawless text rendering and HIDE EMPTY FIELDS
       const inputs = Array.from(element.querySelectorAll('input:not([type="checkbox"]), textarea, select'));
       const replacements = [];
+      const hiddenGroups = [];
       
       inputs.forEach(input => {
+        const parentGroup = input.closest('.input-group');
+        const isMetaInput = input.classList.contains('meta-input');
+        
+        // Logic to Hide Empty Fields:
+        // Skip meta inputs (Date, Doc #) as they are structural, unless they are totally empty
+        if (!isMetaInput && !input.value && parentGroup) {
+          parentGroup.style.display = 'none';
+          hiddenGroups.push(parentGroup);
+          return;
+        }
+
         const parent = input.parentNode;
         const div = document.createElement('div');
         
@@ -99,20 +111,26 @@ if (el.tagName === 'H3' || className.includes('section-title')) {
         // Apply pure black text overrides
         div.style.color = '#000000ff';
         div.style.webkitTextFillColor = '#000000';
-div.style.opacity = '1';
-div.style.fontWeight = '700';
-div.style.fontFamily = "'Inter', system-ui, sans-serif";
-div.style.fontSize = "0.95rem";
-div.style.letterSpacing = computed.letterSpacing;
-div.style.textTransform = computed.textTransform;
-div.style.border = 'none';
-div.style.background = 'transparent';
-div.style.whiteSpace = 'pre-wrap';
-div.style.wordBreak = 'break-word';
+        div.style.opacity = '1';
+        div.style.fontWeight = '700';
+        div.style.fontFamily = "'Inter', system-ui, sans-serif";
+        div.style.fontSize = "0.95rem";
+        div.style.letterSpacing = computed.letterSpacing;
+        div.style.textTransform = computed.textTransform;
+        div.style.border = 'none';
+        div.style.background = 'transparent';
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.wordBreak = 'break-word';
         div.className = input.className;
         
-        // Extract value or placeholder
-        const valueToPrint = input.value || input.placeholder || '';
+        // Extract value - DO NOT fallback to placeholder as per user request
+        const valueToPrint = input.value || '';
+        
+        // If meta input and empty, but still visible, don't show placeholder
+        if (isMetaInput && !input.value) {
+           // Keep it visible but empty
+        }
+
         div.innerText = valueToPrint;
         
         parent.replaceChild(div, input);
@@ -122,6 +140,15 @@ div.style.wordBreak = 'break-word';
       // Flawless checkbox rendering workaround to fix Delivery Form alignment
       const checkboxes = Array.from(element.querySelectorAll('input[type="checkbox"]'));
       checkboxes.forEach(chk => {
+        const parentGroup = chk.closest('.input-group') || chk.closest('label');
+        
+        // Hide unchecked checkboxes in PDF if they are in an input-group
+        if (!chk.checked && parentGroup && parentGroup.classList.contains('input-group')) {
+           // We might want to keep the group if OTHER checkboxes inside are checked
+           // But usually input-group has one conceptual field.
+           // For the Checklist, each checkbox is a label.
+        }
+
         const parent = chk.parentNode;
         const box = document.createElement('span');
         box.style.display = 'inline-flex';
@@ -141,19 +168,69 @@ div.style.wordBreak = 'break-word';
         replacements.push({ parent, div: box, input: chk });
       });
 
+      // HIDE EMPTY SECTIONS AND GRIDS
+      const sections = Array.from(element.querySelectorAll('.section-title'));
+      const hiddenSections = [];
+      const grids = Array.from(element.querySelectorAll('.form-grid'));
+      
+      // First, hide empty grids
+      grids.forEach(grid => {
+        const visibleGroups = Array.from(grid.querySelectorAll('.input-group')).filter(g => g.style.display !== 'none');
+        if (visibleGroups.length === 0) {
+          grid.style.display = 'none';
+          hiddenSections.push(grid); // Reuse hiddenSections array for reversal
+        }
+      });
+
+      // Then hide empty sections
+      sections.forEach(section => {
+        // Find all content that belong to this section
+        let nextEl = section.nextElementSibling;
+        let hasVisibleContent = false;
+        
+        while (nextEl && !nextEl.classList.contains('section-title') && !nextEl.classList.contains('signature-section')) {
+          if (nextEl.style.display !== 'none') {
+             // If it's a grid, we already checked its children, so just check its display
+             hasVisibleContent = true;
+          }
+          if (hasVisibleContent) break;
+          nextEl = nextEl.nextElementSibling;
+        }
+
+        if (!hasVisibleContent) {
+          section.style.display = 'none';
+          hiddenSections.push(section);
+          
+          // Also hide the page break if it's immediately after this empty section
+          let potentialBreak = section.nextElementSibling;
+          if (potentialBreak && potentialBreak.classList.contains('html2pdf__page-break')) {
+             potentialBreak.style.display = 'none';
+             hiddenSections.push(potentialBreak);
+          }
+        }
+      });
+
       const opt = {
         margin: [10, 10],
         filename: `JOD_TECH_Form_${activeTab.toUpperCase()}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true, logging: false },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        pagebreak: { mode: ['css', 'legacy'] }
       };
 
       html2pdf().set(opt).from(element).save().then(() => {
         // REVERT ALL MODIFICATIONS
         replacements.forEach(r => {
           r.parent.replaceChild(r.input, r.div);
+        });
+
+        // Revert hidden groups and sections
+        hiddenGroups.forEach(g => {
+          g.style.display = '';
+        });
+        hiddenSections.forEach(s => {
+          s.style.display = '';
         });
         
         textElements.forEach(el => {
@@ -167,7 +244,10 @@ el.style.borderLeftColor = old.borderLeftColor;
         });
         
         setIsPreview(wasPreview);
+        element.classList.remove('is-preview');
+        element.classList.remove('pdf-capture-mode');
       });
+
     }, 200);
   };
 
@@ -254,9 +334,12 @@ el.style.borderLeftColor = old.borderLeftColor;
               <div className="form-badge">
                 {tabs.find(t => t.id === activeTab)?.label.toUpperCase()}
               </div>
-              <div className="gst-number">GST: 33FAVPR3433JIZ5</div>
               <div className="doc-meta-field">
-                <span className="doc-meta-label">DOC #</span>
+                <span className="doc-meta-label">GST NO:</span>
+                <div className="gst-number">33FAVPR3433JIZ5</div>
+              </div>
+              <div className="doc-meta-field">
+                <span className="doc-meta-label">DOC NO:</span>
                 <input 
                   type="text" 
                   defaultValue={`${activeTab.slice(0, 3).toUpperCase()}-${new Date().getFullYear()}-0416`} 

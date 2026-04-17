@@ -48,6 +48,7 @@ const ChangeOrderForm = () => {
       </div>
 
       {/* 3. Impact Analysis */}
+
       <h3 className="section-title"><TrendingUp size={20} /> Impact Analysis</h3>
       <div className="form-grid">
         <div className="input-group">
@@ -75,6 +76,7 @@ const ChangeOrderForm = () => {
       {/* PAGE BREAK: Signatures onto Page 2 */}
       <div className="html2pdf__page-break"></div>
     </div>
+
   );
 };
 
