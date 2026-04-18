@@ -880,5 +880,5 @@ label,
 .capturing-pdf {
   pointer-events: none !important;
   user-select: none !important;
-  overflow: hidden !important;
+  overflow: visible !important;
 }
