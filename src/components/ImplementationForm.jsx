@@ -67,8 +67,6 @@ const ImplementationForm = () => {
         </div>
       </div>
 
-      {/* PAGE BREAK: Timeline, Risks, and Signatures onto Page 2 */}
-      <div className="html2pdf__page-break"></div>
 
       {/* 4. Timeline and Milestones */}
 

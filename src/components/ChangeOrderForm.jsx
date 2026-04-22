@@ -72,8 +72,6 @@ const ChangeOrderForm = () => {
         </div>
       </div>
 
-      {/* PAGE BREAK: Signatures onto Page 2 */}
-      <div className="html2pdf__page-break"></div>
     </div>
 
   );

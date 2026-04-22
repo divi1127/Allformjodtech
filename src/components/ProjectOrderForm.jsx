@@ -91,8 +91,6 @@ const ProjectOrderForm = () => {
         </div>
       </div>
 
-      {/* PAGE BREAK: Timeline, Commercial, and Signatures onto Page 2 */}
-      <div className="html2pdf__page-break"></div>
 
       {/* 3. Timeline Details */}
 
