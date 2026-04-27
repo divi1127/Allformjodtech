@@ -42,7 +42,7 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 .topbar-logo img {
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: 100%; object-fit: contain;
 }
 .topbar-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 600; color: #e2e8f0; }
 .topbar-sub { font-size: 11px; color: #64748b; margin-top: 1px; }
@@ -157,7 +157,7 @@ textarea.finput { resize: vertical; min-height: 72px; line-height: 1.5; }
   overflow: hidden;
 }
 .doc-logo img {
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: 100%; object-fit: contain;
 }
 .doc-co-name {
   font-family: 'Playfair Display', serif;
@@ -260,23 +260,48 @@ textarea.finput { resize: vertical; min-height: 72px; line-height: 1.5; }
   text-align: center; font-size: 9.5px; color: #94a3b8;
 }
 
-/* MOBILE TABS */
-.mobile-tabs { display: none; background: #0d1526; padding: 12px 16px 0; gap: 6px; overflow-x: auto; border-bottom: 1px solid rgba(255,255,255,0.06); }
-.mobile-tab {
-  padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
-  cursor: pointer; white-space: nowrap; transition: all 0.2s; color: #64748b;
+/* MOBILE BOTTOM NAV */
+.bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(13, 21, 38, 0.85);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  height: 68px;
+  padding: 0 16px;
+  z-index: 1000;
+  justify-content: space-around;
+  align-items: center;
 }
-.mobile-tab.active { color: #42a5f5; background: rgba(66,165,245,0.12); }
+.nav-item {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 5px; color: #64748b; cursor: pointer; transition: all 0.2s;
+  padding: 8px; border-radius: 12px; min-width: 60px;
+}
+.nav-item svg { width: 22px; height: 22px; stroke-width: 2; transition: transform 0.2s; }
+.nav-item span { font-size: 10px; font-weight: 600; letter-spacing: 0.2px; }
+.nav-item.active { color: #42a5f5; background: rgba(66,165,245,0.08); }
+.nav-item.active svg { transform: translateY(-2px); }
+.nav-preview-btn {
+  background: #42a5f5; color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 15px rgba(66,165,245,0.4);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.nav-preview-btn.active { background: #f59e0b; box-shadow: 0 4px 15px rgba(245,158,11,0.4); transform: scale(1.1); }
+.nav-preview-btn svg { width: 24px; height: 24px; }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .topbar { height: auto; padding: 12px 16px; flex-wrap: wrap; justify-content: space-between; }
   .topbar-brand { flex: 1; }
   .topbar-title { font-size: 14px; }
-  .split { flex-direction: column; height: auto; }
+  .split { flex-direction: column; height: auto; padding-bottom: 80px; }
   .pane-form { width: 100%; min-width: unset; max-height: none; padding: 16px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
   .pane-preview { padding: 12px; }
   .doc { padding: 24px 18px; font-size: 11px; min-height: unset; }
+  .topbar-logo { width: 36px; height: 36px; }
   .doc-header { gap: 12px; }
   .doc-logo { width: 50px; height: 50px; }
   .doc-co-name { font-size: 18px; }
@@ -290,14 +315,16 @@ textarea.finput { resize: vertical; min-height: 72px; line-height: 1.5; }
   .checklist-grid { grid-template-columns: 1fr; }
   .sig-row { flex-direction: column; gap: 20px; }
   .form-tabs { display: none; }
-  .mobile-tabs { display: flex; }
+  .mobile-tabs { display: none; }
+  .mobile-view-toggle { display: none; }
+  .bottom-nav { display: flex; }
   .fgrid2 { grid-template-columns: 1fr; }
 }
 
 /* PRINT */
 @media print {
   body { background: white !important; }
-  .topbar, .form-tabs, .mobile-tabs, .pane-form, .mobile-view-toggle { display: none !important; }
+  .topbar, .form-tabs, .mobile-tabs, .pane-form, .mobile-view-toggle, .bottom-nav { display: none !important; }
   .doc-grid { grid-template-columns: 1fr 1fr !important; gap: 0 40px !important; }
   .full-width { grid-column: 1 / -1 !important; }
   .split { height: auto; display: block !important; }
@@ -920,24 +947,36 @@ export default function App() {
         ))}
       </div>
 
-      {/* MOBILE TABS */}
-      <div className="mobile-tabs">
-        {FORMS.map(f => (
-          <div key={f.id} className={`mobile-tab${activeForm === f.id ? " active" : ""}`} onClick={() => setActiveForm(f.id)}>
-            {f.short}
+      {/* MOBILE BOTTOM NAV */}
+      <div className="bottom-nav">
+        {FORMS.slice(0, 2).map(f => (
+          <div key={f.id} className={`nav-item${activeForm === f.id ? " active" : ""}`} onClick={() => { setActiveForm(f.id); setMobileView("form"); }}>
+            {f.id === "co" ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            )}
+            <span>{f.short}</span>
           </div>
         ))}
-      </div>
-      <div style={{ display: "flex", background: "#0d1526", padding: "8px 16px", gap: "8px" }} className="mobile-view-toggle">
-        {["form","preview"].map(v => (
-          <button key={v} onClick={() => setMobileView(v)} style={{
-            padding: "6px 14px", borderRadius: "7px", border: "none", cursor: "pointer",
-            fontSize: "12px", fontWeight: 600, fontFamily: "DM Sans, sans-serif",
-            background: mobileView === v ? "rgba(66,165,245,0.15)" : "transparent",
-            color: mobileView === v ? "#42a5f5" : "#64748b",
-          }}>
-            {v === "form" ? "✏ Edit" : "👁 Preview"}
-          </button>
+        
+        <div className={`nav-preview-btn${mobileView === "preview" ? " active" : ""}`} onClick={() => setMobileView(mobileView === "form" ? "preview" : "form")}>
+          {mobileView === "form" ? (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          )}
+        </div>
+
+        {FORMS.slice(2).map(f => (
+          <div key={f.id} className={`nav-item${activeForm === f.id ? " active" : ""}`} onClick={() => { setActiveForm(f.id); setMobileView("form"); }}>
+            {f.id === "da" ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            )}
+            <span>{f.short}</span>
+          </div>
         ))}
       </div>
 
